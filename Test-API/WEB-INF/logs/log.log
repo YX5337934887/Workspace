@@ -1,0 +1,4 @@
+05-07 14:45:20.420 0    DEBUG [main]                             TestLog4j     - main(String[]) - start
+05-07 14:45:20.423 3    DEBUG [main]                             TestLog4j     - main(String[]) - end
+05-07 14:49:31.245 0    DEBUG [main]                             TestLog4j     - main(String[]) - start
+05-07 14:51:35.897 124652 DEBUG [main]                             TestLog4j     - main(String[]) - end

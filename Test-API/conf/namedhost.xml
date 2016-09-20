@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+
+<mapper namespace="HTRMapper">
+
+	<resultMap id="ReportMapper"
+		type="com.cisco.webex.mediation.bean.ReportMapper">
+		<result property="HGSSITEID" column="HGSSITEID"/>
+		<result property="SITENAME" column="SITENAME"/>
+		<result property="HOSTNAME" column="HOSTNAME"/>
+		<result property="UID_HOSTID" column="UID_HOSTID"/>
+		<result property="USERNAME" column="USERNAME"/>
+		<result property="OBJID" column="OBJID"/>
+		<result property="CONFID" column="CONFID"/>
+		<result property="CONFNAME" column="CONFNAME"/>
+		<result property="MTGSTARTTIME" column="MTGSTARTTIME"/>
+		<result property="MTGENDTIME" column="MTGENDTIME"/>
+		<result property="EDRSTARTTIME" column="EDRSTARTTIME"/>
+		<result property="EDRENDTIME" column="EDRENDTIME"/>
+		<result property="DURATION" column="DURATION"/>
+		<result property="PEOPLEMIN" column="PEOPLEMIN"/>
+		<result property="PEAKATTENDEE" column="PEAKATTENDEE"/>
+		<result property="SERVICEIDENTIFIER" column="SERVICEIDENTIFIER"/>
+		<result property="SESSIONTYPE" column="SESSIONTYPE"/>
+		<result property="SERVICETYPE" column="SERVICETYPE"/>
+		<result property="SERVICEINDEX" column="SERVICEINDEX"/>
+		<result property="CALLTYPE" column="CALLTYPE"/>
+		<result property="PHONENUM" column="PHONENUM"/>
+		<result property="DID" column="DID"/>
+		<result property="BRIDGECOUNTRY" column="BRIDGECOUNTRY"/>
+		<result property="COUNTRYCODE" column="COUNTRYCODE"/>
+		<result property="TOLLTYPE" column="TOLLTYPE"/>
+		<result property="AREACODE" column="AREACODE"/>
+		<result property="DIVISION" column="DIVISION"/>
+		<result property="DEPARTMENT" column="DEPARTMENT"/>
+		<result property="PROJECT" column="PROJECT"/>
+		<result property="OTHER" column="OTHER"/>
+		<result property="PROJECTNUMBER" column="PROJECTNUMBER"/>
+		<result property="TRACKINGNUMBER" column="TRACKINGNUMBER"/>
+		<result property="CUSTOM7" column="CUSTOM7"/>
+		<result property="CUSTOM8" column="CUSTOM8"/>
+		<result property="CUSTOM9" column="CUSTOM9"/>
+		<result property="CUSTOM10" column="CUSTOM10"/>
+		<result property="CONSUMPTIONDATE" column="CONSUMPTIONDATE"/>
+		<result property="SUBSCRIPTIONCODE" column="SUBSCRIPTIONCODE"/>
+		<result property="SERVICECODE" column="SERVICECODE"/>
+		<result property="ORGID" column="ORGID"/>
+	</resultMap>
+	
+	<update id="updateinfo" parameterType="hashmap">
+	    update XXRPT_NAMEDHOST set
+	    	 PRERATE_STATUS = ${state},PRERATE_DATE = SYSDATE
+		WHERE OBJID in 
+		<foreach item="item" index="index" collection="pkList" open="(" separator="," close=")">
+		    #{item}
+		</foreach>
+	</update>
+	
+	<!-- get the BRM segments -->
+	<select id="getSegmentinfo" resultType="java.lang.String">
+		select 10002 from dual
+		union
+		select 10005 from dual
+		union
+		select 10007 from dual
+	</select>
+	
+	<update id="updateinfo1" parameterType="hashmap">
+	    update XXRPT_NAMEDHOST set
+	    	 PRERATE_STATUS = 1,PRERATE_DATE = SYSDATE
+		WHERE OBJID in 
+		<foreach item="item" index="index" collection="pkList" open="(" separator="," close=")">
+		    #{item}
+		</foreach>
+	</update>
+	
+	<update id="updateinfo2" parameterType="hashmap">
+	    update XXRPT_NAMEDHOST set
+	    	 PRERATE_STATUS = 2,PRERATE_DATE = SYSDATE
+		WHERE OBJID in 
+		<foreach item="item" index="index" collection="pkList" open="(" separator="," close=")">
+		    #{item}
+		</foreach>
+	</update>
+	
+	<select id="getinfo" resultMap="ReportMapper" parameterType="hashmap">
+		SELECT 
+			A.HGSSITEID,
+			A.SITENAME,
+			NULL AS HOSTNAME,
+			A.UID_ AS UID_HOSTID,
+			NULL AS USERNAME,
+			A.OBJID,
+			NULL AS CONFID,
+			NULL AS CONFNAME,
+			NULL AS MTGSTARTTIME,
+			NULL AS MTGENDTIME,
+			NULL AS EDRSTARTTIME,
+			NULL AS EDRENDTIME,
+			NULL AS DURATION,
+			NULL AS PEOPLEMIN,
+			NULL AS PEAKATTENDEE,
+			A.SERVICEIDENTIFIER,
+			A.SERVICETYPE,
+			A.SERVICEINDEX,
+			NULL AS SESSIONTYPE,
+			NULL AS CALLTYPE,
+			NULL AS PHONENUM,
+			NULL AS DID,
+			NULL AS BRIDGECOUNTRY,
+			NULL AS COUNTRYCODE,
+			NULL AS TOLLTYPE,
+			NULL AS AREACODE,
+			A.DIVISION,
+			A.DEPARTMENT,
+			A.PROJECT,
+			A.OTHER,
+			A.PROJECTNUMBER,
+			A.TRACKINGNUMBER,
+			A.CUSTOM7,
+			A.CUSTOM8,
+			A.CUSTOM9,
+			A.CUSTOM10,
+			A.DATESTAMP AS CONSUMPTIONDATE,
+			A.SUBSCRIPTION_CODE AS SUBSCRIPTIONCODE,
+			A.SERVICECODE,
+			NULL AS ORGID
+		  <![CDATA[
+		  FROM XXRPT_NAMEDHOST A,XXBRM_SITE_SERVICE_MAP B
+		  WHERE MOD (A.OBJID, #{modNum}) = #{remainder}  
+		 	and A.PRERATE_STATUS = #{state}
+		 	and A.HGSSITEID = B.HGSSITE_ID
+		 	and B.SEGMENT = #{segment}
+		 	and B.SERVICE_OBJ_TYPE = '/service/webex/meeting'
+		 	and ROWNUM <= #{queryLimit}	 
+       		AND A.DATESTAMP >= to_date(#{startDate}, 'yyyy-mm-dd')
+ 			AND A.DATESTAMP < to_date(#{endDate}, 'yyyy-mm-dd') 
+     		<if test="hgsSiteId != null">  
+         		AND A.HGSSITEID = #{hgsSiteId}  
+     		</if>
+		 	]]>	     		
+	</select>
+	
+</mapper>
