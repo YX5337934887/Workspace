@@ -14,7 +14,8 @@ hs_err_pid*
 # eclipse
 #.classpath
 #.project
+.metadata
 .settings/
 
-/bin/
+bin/
 /WEB-INF/classes/
