@@ -18,7 +18,7 @@ public class Test {
 		System.out.println("文件大小" + basicfile.size());
 		DosFileAttributeView dosview = Files.getFileAttributeView(path,
 				DosFileAttributeView.class);
-		dosview.setHidden(true);
-		dosview.setReadOnly(true);
+		dosview.setHidden(true);	//设置为隐藏文件
+		dosview.setReadOnly(true);	//设置文件为只读
 	}
 }
