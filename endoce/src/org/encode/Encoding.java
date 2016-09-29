@@ -2,13 +2,14 @@ package org.encode;
 
 public class Encoding {
 	public static String getEncoding(String str) {
-		String encode = "GB2312";
-		String []encodes = {"GB2312","ISO-8859-1","UTF-8","GBK"};
+		String encode = "";
+		String []encodes = {"ISO-8859-1","UTF-8","Unicode","GBK","GB2312","GB18030"};
 		try {
 			for(int i=0;i<encodes.length;i++) {
 				encode = encodes[i];
 				if (str.equals(new String(str.getBytes(encode), encode))) {
-					return encode;
+//					return encode;
+					break;
 				}
 			}
 		}
@@ -52,6 +53,6 @@ public class Encoding {
 			System.out.println(e);
 		}
 		*/
-		return "";
+		return encode;
 	}
 }
