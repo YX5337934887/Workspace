@@ -16,6 +16,8 @@ public class Test {
 			System.out.println(Encoding.getEncoding(str)+","+str);
 			str=new String(str.getBytes("gb2312"),"gbk");
 			System.out.println(Encoding.getEncoding(str)+","+str);
+			str=new String(str.getBytes("Unicode"),"gbk");
+			System.out.println(Encoding.getEncoding(str)+","+str);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
